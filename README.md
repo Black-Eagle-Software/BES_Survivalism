@@ -17,7 +17,7 @@ public void CustomVoidFunction() {
   //custom function logic goes here
 }
 ```
-Functions may return values, and have values passed in as any type that the Lua implementation understands.
+Functions may return values, and have values passed in as any type that the Lua implementation understands.  A sample script has been included in the `Sample Scripts` folder.  The contents of this folder are intended to live in your `Documents\Black Eagle Software\Survivalism\Scripts\Scenarios` folder for use while running the game.  All scenario folders must be named uniquely, and contain a `.toc` file named the same as the scenario folder.  The contents of this file are still being finalized, but at a minimum it must contain the full names (filename + extension) for each of the script files within the scenario folder.  Refer to  https://github.com/gramseyBES/BES_Survivalism/blob/master/Sample%20Scripts/Police_Station/Police_Station.toc for the how to list these script files. 
 
 ###This is still very much a work-in-progress.
 Many features are currently in a placeholder state, if they're even mentioned, such as the ability for a script to set limits on when it can be called (player needs X item, or not before day Y).  Eventually, the framework will allow for creating a game that handles saving and loading state, player-facing decision trees, recording of player story decisions as the game progresses, items and inventory management, npc party systems, and many more features.  
