@@ -2,9 +2,9 @@
 A WPF/Lua story framework in .Net 4.6
 
 This framework is broken up into three sections:
-* **WPF renderer** - renders all output text into a FlowDocument, with Decisions rendering as buttons in a StackPanel
-* **C# logic** - controls (will control?) all game-specific logic, such as saving, loading, and decision history
-* **Lua scripting** - the meat of the game play will be controlled via Lua scripts interacting with the C# logic
+* **WPF renderer** - Renders all output text into a FlowDocument, with Decisions rendering as buttons in a StackPanel.  Additional UI elements will be added as needed in the future (item inventory, player status, etc.)
+* **C# logic** - Controls (will control?) all game-specific logic, such as saving, loading, and decision history.  Talks to renderer and scripts/scripting engine via [MVVM Light](http://www.mvvmlight.net) messages.
+* **Lua scripting** - The meat of the game play will be controlled via Lua scripts interacting with the C# logic.  Handled via [NLua](http://nlua.org)
 
 The main entry point of the app is the `ApplicationManager` class, which sets up the required directories and files, starts the `LuaScriptingEngine`, reads in any `Scenario` files that might be on disk, starts the `GameManager`, then starts the `MainWindowVM` and shows `MainWindow`.
 
@@ -17,7 +17,9 @@ public void CustomVoidFunction() {
   //custom function logic goes here
 }
 ```
-Functions may return values, and have values passed in as any type that the Lua implementation understands.  A sample script has been included in the `Sample Scripts` folder.  The contents of this folder are intended to live in your `Documents\Black Eagle Software\Survivalism\Scripts\Scenarios` folder for use while running the game.  All scenario folders must be named uniquely, and contain a `.toc` file named the same as the scenario folder.  The contents of this file are still being finalized, but at a minimum it must contain the full names (filename + extension) for each of the script files within the scenario folder.  Refer to  https://github.com/gramseyBES/BES_Survivalism/blob/master/Sample%20Scripts/Police_Station/Police_Station.toc for the how to list these script files. 
+Functions may return values, and have values passed in as any type that the Lua implementation understands.  The `LuaFunctionRegistrar` parses the custom functions and adds them to the Lua state as part of the `LuaScriptingEngine` startup process.  
+
+A sample script has been included in the `Sample Scripts` folder.  The contents of this folder are intended to live in your `Documents\Black Eagle Software\Survivalism\Scripts\Scenarios` folder for use while running the game.  All scenario folders must be named uniquely, and contain a `.toc` file named the same as the scenario folder.  The contents of this file are still being finalized, but at a minimum it must contain the full names (filename + extension) for each of the script files within the scenario folder.  Refer to [Police_Station sample .toc file](https://github.com/gramseyBES/BES_Survivalism/blob/master/Sample%20Scripts/Police_Station/Police_Station.toc) for the how to list these script files. 
 
 ###This is still very much a work-in-progress.
 Many features are currently in a placeholder state, if they're even mentioned, such as the ability for a script to set limits on when it can be called (player needs X item, or not before day Y).  Eventually, the framework will allow for creating a game that handles saving and loading state, player-facing decision trees, recording of player story decisions as the game progresses, items and inventory management, npc party systems, and many more features.  
