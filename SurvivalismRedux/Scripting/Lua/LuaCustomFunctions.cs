@@ -31,34 +31,31 @@ namespace SurvivalismRedux.Scripting.Lua {
 
         [RegisterScriptFunction( "BES_SendDecisionMessage", "Send a table of decisions to the UI", "decisions: Table of decisions to send" )]
         public void SendDecisionMessage( LuaTable decisionsToSend ) {
-            if ( decisionsToSend != null ) {
-                if ( decisionsToSend.Values.Count > 1 ) {
-                    var decs=new Decision[decisionsToSend.Keys.Count];
-                    for ( int i = 0; i < decisionsToSend.Keys.Count; i++ ) {
-                        decs[i] = (Decision)decisionsToSend[i];
-                    }
-                    Messenger.Default.Send( new DecisionMessage( decs ) );
-                }else {
-                    var d = decisionsToSend.Values.Cast<Decision>().ToArray();
-                    Messenger.Default.Send( new DecisionMessage( d[0] ) );
+            if (decisionsToSend == null) {
+                return;
+            }
+            if ( decisionsToSend.Values.Count > 1 ) {
+                var decs=new Decision[decisionsToSend.Keys.Count];
+                for ( var i = 0; i < decisionsToSend.Keys.Count; i++ ) {
+                    decs[i] = (Decision)decisionsToSend[i];
                 }
+                Messenger.Default.Send( new DecisionMessage( decs ) );
+            }else {
+                var d = decisionsToSend.Values.Cast<Decision>().ToArray();
+                Messenger.Default.Send( new DecisionMessage( d[0] ) );
             }
         }
-        [RegisterScriptFunction( "BES_CreateDecision", "Create a decision", new[] {
-            "desc: Decsription of the decision",
-            "func: Function to be called when this decision is chosen",
-            "cost: Action points cost of choosing this decision"
-        } )]
+
+        [RegisterScriptFunction( "BES_CreateDecision", "Create a decision", 
+            "desc: Decsription of the decision", "func: Function to be called when this decision is chosen", 
+            "cost: Action points cost of choosing this decision")]
         public Decision CreateDecision( string desc, LuaFunction func, int cost ) {
             var d = new Decision( desc, () => { func.Call(); }, cost );
-            return d != null ? d : null;
+            return d;
         }
 
-        [RegisterScriptFunction("BES_ChangePlayerStats", "Change the value of a player's stat", new[] {
-            "player: Player to target",
-            "stat: Stat value to change",
-            "value: Amount to change the stat by"
-        } )]
+        [RegisterScriptFunction("BES_ChangePlayerStats", "Change the value of a player's stat", 
+            "player: Player to target", "stat: Stat value to change", "value: Amount to change the stat by")]
         public void ChangeStats(string pName, string sName, int amount ) {
             Messenger.Default.Send( new StatChangeMessage( pName, sName, amount ) );
         }
@@ -79,7 +76,8 @@ namespace SurvivalismRedux.Scripting.Lua {
 
         [RegisterScriptFunction("BES_ExitGame", "Exits the game")]
         public void ExitGame() {
-            GameManager.Instance.EndGame();
+            //GameManager.Instance.EndGame();
+            GameManager.Instance.EndGameAskForConfirmation();
         }
         [RegisterScriptFunction("BES_EnterTestArea", "Enters test area of the game")]
         public void EnterTestArea() {

@@ -16,7 +16,7 @@ namespace SurvivalismRedux.Managers {
         #region Constructors
 
         protected GameManager() {
-            _messenger = Messenger.Default;
+            this._messenger = Messenger.Default;
         }
 
         #endregion
@@ -24,7 +24,7 @@ namespace SurvivalismRedux.Managers {
 
         #region Properties
 
-        public Game CurrentGame { get { return _games[0]; } }
+        public Game CurrentGame => this._games[0];
 
         #endregion
 
@@ -33,11 +33,11 @@ namespace SurvivalismRedux.Managers {
 
         internal void Initialize() {
             //start our scripting engine
-            _messenger.Send( new ExecuteScriptMessage( Assembly.GetExecutingAssembly().GetManifestResourceStream( "SurvivalismRedux.Resources.Scripts.GameManager.lua" ), "GameManager" ) );
+            this._messenger.Send( new ExecuteScriptMessage( Assembly.GetExecutingAssembly().GetManifestResourceStream( "SurvivalismRedux.Resources.Scripts.GameManager.lua" ), "GameManager" ) );
 
-            _saves = SaveGameManager.Instance;
+            this._saves = SaveGameManager.Instance;
 
-            _games = new List<Game>();
+            this._games = new List<Game>();
         }
 
         internal void GameIsShuttingDown() {
@@ -45,28 +45,28 @@ namespace SurvivalismRedux.Managers {
         }
 
         public void StartGame() {
-            _messenger.Send( new PrintMessage( "Starting new game in GameManager...", PrintMessage.MessageType.DEBUG ) );
+            this._messenger.Send( new PrintMessage( "Starting new game in GameManager...", PrintMessage.MessageType.DEBUG ) );
 
-            if ( _games.Count > 0 ) _games.Clear();
-            _games.Add( new Game() );
+            if (this._games.Count > 0 ) this._games.Clear();
+            this._games.Add( new Game() );
 
-            for ( var i = 0; i < _games.Count; i++ ) {
-                if ( !_games[ i ].HasSaveData ) _games[ i ].Initialize(); //not sure about this
-                _games[i].StartGame();
+            foreach (var g in this._games) {
+                if ( !g.HasSaveData ) g.Initialize(); //not sure about this
+                g.StartGame();
             }
         }
 
         public void EndGame() {
-            _messenger.Send( new PrintMessage( "Exiting the game in GameManager...", PrintMessage.MessageType.DEBUG ) );
-            GameIsShuttingDown();
+            this._messenger.Send( new PrintMessage( "Exiting the game in GameManager...", PrintMessage.MessageType.DEBUG ) );
+            this.GameIsShuttingDown();
             Application.Current.Shutdown();
         }
 
         public void EndGameAskForConfirmation() {
-            _messenger.Send( new PrintMessage( "Are you sure you want to exit?" ) );
-            _messenger.Send( new DecisionMessage( new Decision[] {
-                new Decision( "Yes", EndGame ),
-                new Decision( "No", EndGame )
+            this._messenger.Send( new PrintMessage( "Are you sure you want to exit?" ) );
+            this._messenger.Send( new DecisionMessage( new[] {
+                new Decision( "Yes", this.EndGame ),
+                new Decision( "No", this.EndGame )
             } ) );
         }
 
@@ -75,7 +75,7 @@ namespace SurvivalismRedux.Managers {
 
         #region Fields
 
-        private IMessenger _messenger;
+        private readonly IMessenger _messenger;
         private SaveGameManager _saves;
         private List<Game> _games;        
 

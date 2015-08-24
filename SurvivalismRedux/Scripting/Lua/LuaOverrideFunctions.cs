@@ -34,7 +34,7 @@ namespace SurvivalismRedux.Scripting.Lua {
 
         [RegisterScriptFunction( "print", "Print strings to the UI.", "S: string to print" )]
         public void RenderPrint( string s ) {
-            Messenger.Default.Send( new PrintMessage( s, PrintMessage.MessageType.PRINT ) );
+            Messenger.Default.Send( new PrintMessage( s ) );
             //Console.WriteLine( "Printing from Lua: '{0}'", s );
         }
 
