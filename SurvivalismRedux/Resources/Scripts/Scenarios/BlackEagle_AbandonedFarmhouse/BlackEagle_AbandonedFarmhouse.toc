@@ -1,0 +1,8 @@
+## API_Version: 100
+## Title: Abandoned Farmhouse
+## Description: Abandoned Farmhouse scenario
+## Version: 0.5
+## Author: Black Eagle Software
+
+BlackEagle_AbandonedFarmhouse_Globals.lua
+BlackEagle_AbandonedFarmhouse.lua

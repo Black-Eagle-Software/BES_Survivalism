@@ -1,0 +1,1 @@
+BlackEagle_AbandonedFarmhouse.entryText="You stumble upon an abandoned farmhouse.  The only noise you hear is the wind slamming a loose shutter.";
