@@ -5,14 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SurvivalismRedux.Scripting {
-    public enum Tags {
+    public enum TocTags {
         API_Version,
         Author,
-        Dependencies,
         Description,
-        MinimumHeadCount,
-        SavedVariables,
-        Storylines,
+        Requirements,
         Title,
         Version
     }

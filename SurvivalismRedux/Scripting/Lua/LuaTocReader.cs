@@ -6,13 +6,15 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GalaSoft.MvvmLight.Messaging;
+using SurvivalismRedux.MessageTypes;
 
 namespace SurvivalismRedux.Scripting.Lua {
     public class LuaTocReader : IScriptTocReader {
         #region Constructors
 
         public LuaTocReader() {
-            _tags = Enum.GetNames( typeof( Tags ) );
+            this._tags = Enum.GetNames( typeof( TocTags ) );
         }
 
         #endregion
@@ -27,22 +29,21 @@ namespace SurvivalismRedux.Scripting.Lua {
 
         #region Methods
 
-        public Scenario ReadTocFileFromStream(Stream file, string tocFilename, string expectedPath ) {
+        public Scenario ReadTocFileFromStream( Stream file, string tocFilename, string expectedPath ) {
             var lines = new List<string>();
             using ( var sr = new StreamReader( file ) ) {
                 while ( !sr.EndOfStream ) {
                     lines.Add( sr.ReadLine() );
                 }
             }
-            var result = new Scenario();
-            result.TocFilename = tocFilename;
+            var result = new Scenario { TocFilename = tocFilename };
             //this will get messy
             var files = new List<string>();
             foreach ( var line in lines ) {
                 if ( line.Length == 0 ) continue;
                 if ( line.StartsWith( "##" ) ) {
                     //found a header line
-                    CheckHeaderTag( line, result );
+                    this.CheckHeaderTag( line, result );
                 } else if ( line.StartsWith( "#" ) ) {
                     //should have found a comment line, ignore it
                     break;
@@ -58,15 +59,14 @@ namespace SurvivalismRedux.Scripting.Lua {
         public Scenario ReadTocFileFromFilePath( string filePath ) {
             if ( string.IsNullOrEmpty( filePath ) ) return null;
             var lines = File.ReadAllLines( filePath );
-            var result = new Scenario();
-            result.TocFilename = Path.GetFileName( filePath );
+            var result = new Scenario { TocFilename = Path.GetFileName( filePath ) };
             //this will get messy
             var files = new List<string>();
             foreach ( var line in lines ) {
                 if ( line.Length == 0 ) continue;
                 if ( line.StartsWith( "##" ) ) {
                     //found a header line
-                    CheckHeaderTag( line, result );
+                    this.CheckHeaderTag( line, result );
                 } else if ( line.StartsWith( "#" ) ) {
                     //should have found a comment line, ignore it
                     break;
@@ -88,39 +88,69 @@ namespace SurvivalismRedux.Scripting.Lua {
             var colonIndex = ss.IndexOf( ':' );
             var tag = ss.Substring( 0, colonIndex );
             var value = ss.Substring( colonIndex + 1 );
-            if ( _tags.Any( t => t.Equals( tag, StringComparison.OrdinalIgnoreCase ) ) ) {
-                //found a tag, so pull out the value
-                var tagTag = ( Tags )Enum.Parse( typeof( Tags ), tag );
-                switch ( tagTag ) {
-                    case Tags.API_Version:
-                        scenario.ApiVersion = int.Parse( value );
+            if ( !this._tags.Any( t => t.Equals( tag, StringComparison.OrdinalIgnoreCase ) ) ) {
+                return;
+            }
+            //found a tag, so pull out the value
+            var tagTag = ( TocTags )Enum.Parse( typeof( TocTags ), tag );
+            switch ( tagTag ) {
+                case TocTags.API_Version:
+                    scenario.ApiVersion = int.Parse( value );
+                    break;
+                case TocTags.Author:
+                    scenario.Author = value;
+                    break;
+                case TocTags.Description:
+                    scenario.Description = value;
+                    break;
+                case TocTags.Requirements:
+                    this.ReadRequirementsTags( value, scenario );
+                    break;
+                case TocTags.Title:
+                    scenario.Title = value;
+                    break;
+                case TocTags.Version:
+                    scenario.Version = value;
+                    break;
+            }
+        }
+
+        private void ReadRequirementsTags( string value, Scenario scenario ) {
+            //found a requirement, so read the tag(s) and values and add to scenario
+            var tags = value.Split( ';' );
+            foreach ( var s in tags ) {
+                if ( string.IsNullOrEmpty( s ) ) continue;
+                //Console.WriteLine( $"Found tag:{s.Trim()}" );
+                //Messenger.Default.Send( new PrintMessage( $"Found tag:{s.Trim()}", PrintMessage.MessageType.DEBUG ) );
+                //try and break up tags into header and values outside and inside of () respectively
+                var para1 = s.IndexOf( '(' );
+                var header = s.Substring( 0, para1 );
+                var vLength = s.Length - 1 - ( para1 + 1 );
+                var values = s.Substring( para1 + 1, vLength );
+                Console.WriteLine( values );
+                var hTag = ( RequirementTags )Enum.Parse( typeof( RequirementTags ), header );
+                switch ( hTag ) {
+                    case RequirementTags.FirstDay:
+                        var req = new ScenarioRequirement( hTag, new object[] { values } );
                         break;
-                    case Tags.Author:
-                        scenario.Author = value;
+                    case RequirementTags.LastDay:
                         break;
-                    case Tags.Dependencies:
-                        //NYI
+                    case RequirementTags.PartyArchetype:
                         break;
-                    case Tags.MinimumHeadCount:
-                        //NYI
+                    case RequirementTags.PartySize:
                         break;
-                    case Tags.Description:
-                        scenario.Description = value;
+                    case RequirementTags.PlayerArchetype:
                         break;
-                    case Tags.SavedVariables:
-                        //NYI
+                    case RequirementTags.PlayerStatMinimum:
                         break;
-                    case Tags.Storylines:
-                        //NYI
+                    case RequirementTags.PlayerStatMaximum:
                         break;
-                    case Tags.Title:
-                        scenario.Title = value;
+                    case RequirementTags.Storyline:
                         break;
-                    case Tags.Version:
-                        scenario.Version = value;
+                    case RequirementTags.TimeOfDay:
                         break;
                     default:
-                        break;
+                        throw new ArgumentOutOfRangeException();
                 }
             }
         }
@@ -130,7 +160,7 @@ namespace SurvivalismRedux.Scripting.Lua {
 
         #region Fields
 
-        private string[] _tags;
+        private readonly string[] _tags;
 
         #endregion
     }

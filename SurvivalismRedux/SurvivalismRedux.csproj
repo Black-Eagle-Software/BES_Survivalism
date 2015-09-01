@@ -110,6 +110,7 @@
     <Compile Include="Models\Player.cs" />
     <Compile Include="Models\SaveGame.cs" />
     <Compile Include="Models\Scenario.cs" />
+    <Compile Include="Models\ScenarioRequirement.cs" />
     <Compile Include="Models\Singleton.cs" />
     <Compile Include="Models\Stats.cs" />
     <Compile Include="Models\Timeline.cs" />
@@ -128,7 +129,8 @@
     <Compile Include="Scripting\Lua\LuaOverrideFunctions.cs" />
     <Compile Include="Scripting\Lua\LuaScriptingEngine.cs" />
     <Compile Include="Scripting\Lua\LuaTocReader.cs" />
-    <Compile Include="Scripting\Tags.cs" />
+    <Compile Include="Scripting\RequirementTags.cs" />
+    <Compile Include="Scripting\TocTags.cs" />
     <Compile Include="ViewModels\DecisionButtonVM.cs" />
     <Compile Include="ViewModels\MainWindowVM.cs" />
     <Compile Include="ViewModels\ViewModelExtendedBase.cs" />

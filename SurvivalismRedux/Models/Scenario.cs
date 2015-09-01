@@ -26,6 +26,8 @@ namespace SurvivalismRedux.Models {
         public Day LastRan { get; set; }
         public int TimesRan { get; set; }
 
+        public ScenarioRequirement Requirements { get; set; }
+
         #endregion
 
 
