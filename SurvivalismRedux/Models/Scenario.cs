@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SurvivalismRedux.Models.Interfaces;
 
 namespace SurvivalismRedux.Models {
     public class Scenario {
@@ -26,7 +27,8 @@ namespace SurvivalismRedux.Models {
         public Day LastRan { get; set; }
         public int TimesRan { get; set; }
 
-        public ScenarioRequirement Requirements { get; set; }
+        public List<IScenarioRequirement> Requirements
+            => this._requirements ?? (this._requirements = new List<IScenarioRequirement>());
 
         #endregion
 
@@ -40,7 +42,7 @@ namespace SurvivalismRedux.Models {
 
         #region Fields
 
-
+        private List<IScenarioRequirement> _requirements;
 
         #endregion
     }

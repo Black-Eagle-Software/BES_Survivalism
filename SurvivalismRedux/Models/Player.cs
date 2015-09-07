@@ -30,6 +30,7 @@ namespace SurvivalismRedux.Models {
         public int ActionPoints { get; private set; }
         public string Name { get; private set; }
         public Gender PlayerGender { get; private set; }
+        public Archetype PlayerArchetype { get; private set; }
 
         public int Agility { get { return _stats[ Stats.AGILITY ]; } }
         public int Health { get { return _stats[ Stats.HEALTH ]; } }
