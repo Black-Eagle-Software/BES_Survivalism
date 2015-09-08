@@ -15,22 +15,29 @@
     <WarningLevel>4</WarningLevel>
     <TargetFrameworkProfile />
     <CheckForSystemRuntimeDependency>true</CheckForSystemRuntimeDependency>
+    <UpdateAssemblyVersion>True</UpdateAssemblyVersion>
+    <UpdateAssemblyFileVersion>True</UpdateAssemblyFileVersion>
+    <UpdateAssemblyInfoVersion>True</UpdateAssemblyInfoVersion>
+    <AssemblyVersionSettings>None.None.DeltaDayStamp.IncrementOnDemand</AssemblyVersionSettings>
+    <AssemblyFileVersionSettings>None.None.DeltaDayStamp.IncrementOnDemand</AssemblyFileVersionSettings>
+    <AssemblyInfoVersionSettings>None.None.DeltaDayStamp.IncrementOnDemand</AssemblyInfoVersionSettings>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
     <OutputPath>..\bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -86,9 +93,14 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Factory\ArchetypeFactory.cs" />
     <Compile Include="Factory\OutputParagraphFactory.cs" />
     <Compile Include="Factory\PlayerStatOutputFactory.cs" />
+    <Compile Include="Factory\StorylineFactory.cs" />
     <Compile Include="Managers\ApplicationManager.cs" />
+    <Compile Include="Models\Archetype.cs" />
+    <Compile Include="Models\Interfaces\IScenarioRequirement.cs" />
+    <Compile Include="Models\Party.cs" />
     <Compile Include="Models\RandomNumberHelper.cs" />
     <Compile Include="Managers\SaveGameManager.cs" />
     <Compile Include="Managers\ScenarioManager.cs" />
@@ -110,9 +122,10 @@
     <Compile Include="Models\Player.cs" />
     <Compile Include="Models\SaveGame.cs" />
     <Compile Include="Models\Scenario.cs" />
-    <Compile Include="Models\ScenarioRequirement.cs" />
+    <Compile Include="Models\ScenarioRequirementClasses.cs" />
     <Compile Include="Models\Singleton.cs" />
     <Compile Include="Models\Stats.cs" />
+    <Compile Include="Models\Storyline.cs" />
     <Compile Include="Models\Timeline.cs" />
     <Compile Include="Scripting\Lua\LuaScriptManager.cs" />
     <Compile Include="Scripting\Attributes\RegisterScriptFunctionAttribute.cs" />

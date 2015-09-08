@@ -15,7 +15,7 @@ namespace SurvivalismRedux.Models {
 
         #region Properties
 
-
+        public string Name { get; set; }
 
         #endregion
 
@@ -32,5 +32,7 @@ namespace SurvivalismRedux.Models {
 
 
         #endregion
+
+
     }
 }

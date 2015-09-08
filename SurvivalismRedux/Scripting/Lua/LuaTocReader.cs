@@ -2,11 +2,13 @@
 using SurvivalismRedux.Scripting.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight.Messaging;
+using SurvivalismRedux.Factory;
 using SurvivalismRedux.MessageTypes;
 using SurvivalismRedux.Models.Interfaces;
 
@@ -127,41 +129,47 @@ namespace SurvivalismRedux.Scripting.Lua {
                 var para1 = s.IndexOf('(');
                 var header = s.Substring(0, para1);
                 var vLength = s.Length - 1 - (para1 + 1);
-                var values = s.Substring(para1 + 1, vLength);
-                Console.WriteLine(values);
+                var reqValues = s.Substring(para1 + 1, vLength);
+                Console.WriteLine(reqValues);
                 var hTag = (RequirementTags)Enum.Parse(typeof(RequirementTags), header);
                 IScenarioRequirement req;
                 switch (hTag) {
                     case RequirementTags.FirstDay:
-                        req = new FirstDayRequirement(hTag, int.Parse(values));
+                        req = new FirstDayRequirement(hTag, int.Parse(reqValues));
                         break;
                     case RequirementTags.LastDay:
-                        req = new LastDayRequirement(hTag, int.Parse(values));
+                        req = new LastDayRequirement(hTag, int.Parse(reqValues));
                         break;
                     case RequirementTags.PartyArchetype:
-                        //req = new PartyArchetypeRequirement(hTag, (Archetype)values);
+                        req = new PartyArchetypeRequirement(hTag, ArchetypeFactory.Instance.GetArchetypeFromString(reqValues));
                         break;
                     case RequirementTags.PartySize:
-                        req = new PartySizeRequirement(hTag, int.Parse(values));
+                        req = new PartySizeRequirement(hTag, int.Parse(reqValues));
                         break;
                     case RequirementTags.PlayerArchetype:
-                        //req = new PlayerArchetypeRequirement(hTag, (Archetype)values);
+                        req = new PlayerArchetypeRequirement(hTag, ArchetypeFactory.Instance.GetArchetypeFromString(reqValues));
                         break;
                     case RequirementTags.PlayerStatMinimum:
-                        //req = new PlayerStatMinimumRequirement(hTag, int.Parse(values));
+                        var sV1 = reqValues.Split(',');
+                        sV1[0] = sV1[0].Trim('"');
+                        req = new PlayerStatMinimumRequirement(hTag, (Stats)Enum.Parse(typeof(Stats), sV1[0].ToUpper()), int.Parse(sV1[1]));
                         break;
                     case RequirementTags.PlayerStatMaximum:
-                        //req = new PlayerStatMaximumRequirement(hTag, int.Parse(values));
+                        var sV2 = reqValues.Split(',');
+                        sV2[0] = sV2[0].Trim('"');
+                        req = new PlayerStatMaximumRequirement(hTag, (Stats)Enum.Parse(typeof(Stats), sV2[0].ToUpper()), int.Parse(sV2[1]));
                         break;
                     case RequirementTags.Storyline:
-                        //req = new StorylineRequirement(hTag, (Storyline)values);
+                        req = new StorylineRequirement(hTag, StorylineFactory.Instance.GetStorylineFromString(reqValues));
                         break;
                     case RequirementTags.TimeOfDay:
-                        req = new TimeOfDayRequirement(hTag, (Day.TimeOfDay)Enum.Parse(typeof(Day.TimeOfDay), values));
+                        var tc = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(reqValues.Trim('"'));
+                        req = new TimeOfDayRequirement(hTag, (Day.TimeOfDay)Enum.Parse(typeof(Day.TimeOfDay), tc));
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
+                scenario.Requirements.Add(req);
             }
         }
 
