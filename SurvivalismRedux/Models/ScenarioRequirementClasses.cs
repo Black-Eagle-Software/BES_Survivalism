@@ -13,7 +13,7 @@ namespace SurvivalismRedux.Models {
         }
 
         public RequirementTags Name { get; }
-        public abstract bool DoesScenarioMeetRequirements(Storyline story, Day day, Player player, Party party);
+        public abstract bool DoesScenarioMeetRequirements(StorySubject story, Day day, Player player, Party party);
     }
 
     public class FirstDayRequirement : RequirementBase {
@@ -21,7 +21,7 @@ namespace SurvivalismRedux.Models {
             this._day = day;    //needs to check if greater than 0
         }
 
-        public override bool DoesScenarioMeetRequirements(Storyline story, Day day, Player player, Party party) {
+        public override bool DoesScenarioMeetRequirements(StorySubject story, Day day, Player player, Party party) {
             return day.Index >= this._day;
         }
 
@@ -33,7 +33,7 @@ namespace SurvivalismRedux.Models {
             this._day = day;    //needs to check if greater than 0
         }
 
-        public override bool DoesScenarioMeetRequirements(Storyline story, Day day, Player player, Party party) {
+        public override bool DoesScenarioMeetRequirements(StorySubject story, Day day, Player player, Party party) {
             return day.Index <= this._day;
         }
 
@@ -45,7 +45,7 @@ namespace SurvivalismRedux.Models {
             this._archetype = type;
         }
 
-        public override bool DoesScenarioMeetRequirements(Storyline story, Day day, Player player, Party party) {
+        public override bool DoesScenarioMeetRequirements(StorySubject story, Day day, Player player, Party party) {
             return party.Any(p => p.PlayerArchetype == this._archetype);
         }
 
@@ -57,7 +57,7 @@ namespace SurvivalismRedux.Models {
             this._size = size;  //needs to check if greater than 0
         }
 
-        public override bool DoesScenarioMeetRequirements(Storyline story, Day day, Player player, Party party) {
+        public override bool DoesScenarioMeetRequirements(StorySubject story, Day day, Player player, Party party) {
             return party.Count >= this._size;
         }
 
@@ -69,7 +69,7 @@ namespace SurvivalismRedux.Models {
             this._archetype = type;
         }
 
-        public override bool DoesScenarioMeetRequirements(Storyline story, Day day, Player player, Party party) {
+        public override bool DoesScenarioMeetRequirements(StorySubject story, Day day, Player player, Party party) {
             return player.PlayerArchetype == this._archetype;
         }
 
@@ -82,7 +82,7 @@ namespace SurvivalismRedux.Models {
             this._statValue = value;    //needs to check if greater than 0
         }
 
-        public override bool DoesScenarioMeetRequirements(Storyline story, Day day, Player player, Party party) {
+        public override bool DoesScenarioMeetRequirements(StorySubject story, Day day, Player player, Party party) {
             return player.CheckStatValue(this._stat.ToString()) >= this._statValue;
         }
 
@@ -96,7 +96,7 @@ namespace SurvivalismRedux.Models {
             this._statValue = value;    //needs to check if greater than 0
         }
 
-        public override bool DoesScenarioMeetRequirements(Storyline story, Day day, Player player, Party party) {
+        public override bool DoesScenarioMeetRequirements(StorySubject story, Day day, Player player, Party party) {
             return player.CheckStatValue(this._stat.ToString()) <= this._statValue;
         }
 
@@ -105,15 +105,15 @@ namespace SurvivalismRedux.Models {
     }
 
     public class StorylineRequirement : RequirementBase {
-        public StorylineRequirement(RequirementTags name, Storyline story) : base(name) {
+        public StorylineRequirement(RequirementTags name, StorySubject story) : base(name) {
             this._story = story;
         }
 
-        public override bool DoesScenarioMeetRequirements(Storyline story, Day day, Player player, Party party) {
+        public override bool DoesScenarioMeetRequirements(StorySubject story, Day day, Player player, Party party) {
             return story == this._story;
         }
 
-        private readonly Storyline _story;
+        private readonly StorySubject _story;
     }
 
     public class TimeOfDayRequirement : RequirementBase {
@@ -121,7 +121,7 @@ namespace SurvivalismRedux.Models {
             this._tod = tod;
         }
 
-        public override bool DoesScenarioMeetRequirements(Storyline story, Day day, Player player, Party party) {
+        public override bool DoesScenarioMeetRequirements(StorySubject story, Day day, Player player, Party party) {
             return day.Time == this._tod;
         }
 

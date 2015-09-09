@@ -23,7 +23,7 @@ namespace SurvivalismRedux.Factory {
 
         #region Methods
 
-        public Storyline GetStorylineFromString(string reqValues) {
+        public StorySubject GetStorylineFromString(string reqValues) {
             return this._storylines.FirstOrDefault(s => s.Name == reqValues);
         }
 
@@ -32,7 +32,7 @@ namespace SurvivalismRedux.Factory {
 
         #region Fields
 
-        private readonly List<Storyline> _storylines = new List<Storyline>();
+        private readonly List<StorySubject> _storylines = new List<StorySubject>();
 
         #endregion
 

@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight.Messaging;
 using SurvivalismRedux.Factory;
+using SurvivalismRedux.Managers;
 using SurvivalismRedux.MessageTypes;
 using SurvivalismRedux.Models.Interfaces;
 
@@ -160,7 +161,7 @@ namespace SurvivalismRedux.Scripting.Lua {
                         req = new PlayerStatMaximumRequirement(hTag, (Stats)Enum.Parse(typeof(Stats), sV2[0].ToUpper()), int.Parse(sV2[1]));
                         break;
                     case RequirementTags.Storyline:
-                        req = new StorylineRequirement(hTag, StorylineFactory.Instance.GetStorylineFromString(reqValues));
+                        req = new StorylineRequirement(hTag, StorySubjectManager.Instance.GetStorySubject(reqValues));
                         break;
                     case RequirementTags.TimeOfDay:
                         var tc = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(reqValues.Trim('"'));

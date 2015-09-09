@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SurvivalismRedux.Models {
-    public class Storyline {
+    public class StorySubject {
         #region Constructors
 
 

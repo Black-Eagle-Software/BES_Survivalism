@@ -9,6 +9,6 @@ namespace SurvivalismRedux.Models.Interfaces {
     public interface IScenarioRequirement {
         RequirementTags Name { get; }
 
-        bool DoesScenarioMeetRequirements(Storyline story, Day day, Player player, Party party);
+        bool DoesScenarioMeetRequirements(StorySubject story, Day day, Player player, Party party);
     }
 }

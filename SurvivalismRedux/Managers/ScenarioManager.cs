@@ -10,7 +10,7 @@ namespace SurvivalismRedux.Managers {
         #region Constructors
 
         protected ScenarioManager() {
-            _rand = new Random();
+            this._rand = new Random();
         }
 
 
@@ -20,7 +20,7 @@ namespace SurvivalismRedux.Managers {
 
         #region Properties
 
-        public List<Scenario> ScenarioPool { get { return _scenarioPool; } }
+        public List<Scenario> ScenarioPool { get; } = new List<Scenario>();
 
         #endregion
 
@@ -28,12 +28,12 @@ namespace SurvivalismRedux.Managers {
         #region Methods
 
         internal Scenario GetScenario() {
-            return _scenarioPool[_rand.Next( _scenarioPool.Count )];
+            return this.ScenarioPool[this._rand.Next(this.ScenarioPool.Count )];
         }
 
         internal void AddScenario( Scenario s ) {
             if ( s != null ) {
-                _scenarioPool.Add( s );
+                this.ScenarioPool.Add( s );
             }
         }
 
@@ -42,10 +42,7 @@ namespace SurvivalismRedux.Managers {
 
         #region Fields
 
-        private Random _rand;
-        private List<Scenario> _scenarioPool = new List<Scenario>();
-
-        
+        private readonly Random _rand;
 
         #endregion
     }
